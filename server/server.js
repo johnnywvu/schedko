@@ -8,8 +8,8 @@ import convertPdfToImage from './processes/convertPdfToImage.js';
 import { recognizeText } from './processes/ocr.js';
 import { normalizeClassCode } from './processes/utils.js';
 
-let lastClassCode = null; // Store the last received class code in memory
 let ocrResults = []; // Store all parsed objects here
+let filteredResults = []; // Store filtered results based on class code
 
 const app = express();
 app.use(cors());
@@ -84,27 +84,16 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
         });
       }
     }
-    console.log(ocrResults);
+    console.log("ocrDone");
+    
+    const classCode = normalizeClassCode(req.body.classCode);
+
+    filteredResults = ocrResults.filter(obj => obj.classCode === classCode);
+
+    console.log(filteredResults);
+
     return res.status(200).json({ success: true, message: 'File uploaded, converted, and OCR complete' });
   } catch (err) {
-    return res.status(500).json({ success: false, message: 'Server error', error: err.message });
-  }
-});
-
-// --- Class Code Route ---
-app.post('/api/classcode', (req, res) => {
-  try {
-    const { classCode } = req.body;
-    if (!classCode || typeof classCode !== 'string') {
-      console.log('Class code missing or invalid:', req.body);
-      return res.status(400).json({ success: false, message: 'Class code is required' });
-    }
-    const normalizedClassCode = normalizeClassCode(classCode);
-    lastClassCode = normalizedClassCode;
-    console.log('Received class code:', normalizedClassCode, '| Raw body:', req.body);
-    return res.status(200).json({ success: true, message: 'Class code received', classCode: normalizedClassCode });
-  } catch (err) {
-    console.log('Error in /api/classcode:', err, '| Raw body:', req.body);
     return res.status(500).json({ success: false, message: 'Server error', error: err.message });
   }
 });

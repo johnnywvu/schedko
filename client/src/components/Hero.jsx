@@ -58,6 +58,7 @@ const Hero = () => {
     // Now upload the file
     const formData = new FormData();
     formData.append('file', fileToUpload);
+    formData.append('classCode', classCode);
     setIsUploading(true);
     setValidationStatus(null);
     try {
