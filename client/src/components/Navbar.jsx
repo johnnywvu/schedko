@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -30,8 +31,8 @@ const Navbar = () => {
                 {/* Navigation Links */}
                 <div className="hidden md:block">
                     <div className="ml-4 lg:ml-10 flex items-center space-x-2 lg:space-x-4">
-                        <a href="#" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Home</a>
-                        <a href="#" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Archive</a>
+                        <Link to="/" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Home</Link>
+                        <Link to="/schedule" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">My Schedule</Link>
                         <a href="#" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">About</a>
                         <a href="#" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Support</a>
                     </div>
@@ -54,8 +55,8 @@ const Navbar = () => {
             {/* Mobile Menu Dropdown */}
             <div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
                 <div className="px-2 pt-2 pb-3 space-y-1 border-t border-[#004d30]">
-                    <a href="#" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Home</a>
-                    <a href="#" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Archive</a>
+                    <Link to="/" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Home</Link>
+                    <Link to="/schedule" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">My Schedule</Link>
                     <a href="#" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">About</a>
                     <a href="#" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Support</a>
                 </div>

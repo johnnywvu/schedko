@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
 
 @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
@@ -8,4 +7,21 @@
 @theme {
   --font-lora: Lora, "serif";
   --font-jost: Jost, "sans-serif";
+}
+
+/* Animations for modal popup */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes modalPop {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-modalPop {
+  animation: modalPop 0.3s cubic-bezier(.68,-0.55,.27,1.55);
 }
