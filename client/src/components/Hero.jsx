@@ -8,6 +8,11 @@ const Hero = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [validationStatus, setValidationStatus] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showClassCodePrompt, setShowClassCodePrompt] = useState(false);
+  const [classCode, setClassCode] = useState("");
+  const [submittedClassCode, setSubmittedClassCode] = useState("");
+  const [fileToUpload, setFileToUpload] = useState(null);
+  const [showClassCodeDisplay, setShowClassCodeDisplay] = useState(false);
   const navigate = useNavigate();
 
   const handleDragOver = (e) => {
@@ -29,18 +34,39 @@ const Hero = () => {
     }
   };
 
-  const handleFileSelect = async (file) => {
+  const handleFileSelect = (file) => {
     if (!file) return;
+    setShowClassCodePrompt(true); // Prompt for class code immediately
+    setFileToUpload(file);
+  };
+
+  const handleClassCodeSubmit = async () => {
+    if (!classCode.trim() || !fileToUpload) return;
+    setSubmittedClassCode(classCode); // Store for display/testing
+    setShowClassCodePrompt(false); // Hide modal immediately
+    setShowClassCodeDisplay(true); // Show display
+    // Send class code to server
+    try {
+      await fetch('http://localhost:3000/api/classcode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ classCode }),
+      });
+    } catch (err) {
+      // Optionally handle error
+    }
+    // Now upload the file
+    const formData = new FormData();
+    formData.append('file', fileToUpload);
     setIsUploading(true);
     setValidationStatus(null);
-    const formData = new FormData();
-    formData.append('file', file);
     try {
       const response = await fetch('http://localhost:3000/api/upload', {
         method: 'POST',
         body: formData,
       });
-      if (response.ok) {
+      const result = await response.json();
+      if (response.ok && result.success) {
         setValidationStatus(true);
         setShowConfirmation(true); // Show confirmation modal
       } else {
@@ -50,22 +76,46 @@ const Hero = () => {
       setValidationStatus(false);
     } finally {
       setIsUploading(false);
+      setFileToUpload(null);
+      setClassCode("");
     }
+    // Fade out the class code display after 4 seconds
+    setTimeout(() => setShowClassCodeDisplay(false), 4000);
   };
 
   return (
     <div className="container mx-auto px-4 py-8 sm:py-12 md:py-16 lg:py-20">
-      {/* Confirmation Modal */}
-      {showConfirmation && (
+      {/* Class Code Prompt Modal */}
+      {showClassCodePrompt && (
         <div className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 animate-modalPop">
           <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-gray-200">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">File Uploaded!</h2>
-            <p className="mb-6 text-gray-600">Your exam schedule file was uploaded successfully.</p>
-            <button
-              className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
-              onClick={() => setShowConfirmation(false)}
-            >OK</button>
+            <h2 className="text-2xl font-bold mb-4 text-gray-800">Enter Your Class Code</h2>
+            <input
+              type="text"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              placeholder="e.g. MATH101"
+              value={classCode}
+              onChange={e => setClassCode(e.target.value)}
+              autoFocus
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+                onClick={() => { setShowClassCodePrompt(false); setFileToUpload(null); }}
+              >Cancel</button>
+              <button
+                className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+                onClick={handleClassCodeSubmit}
+                disabled={!classCode.trim()}
+              >Submit</button>
+            </div>
           </div>
+        </div>
+      )}
+      {/* Show submitted class code for testing */}
+      {showClassCodeDisplay && (
+        <div className="fixed left-1/2 top-8 z-50 -translate-x-1/2 bg-green-100 text-green-800 px-6 py-2 rounded shadow transition-opacity duration-700 opacity-100 animate-fadeOut">
+          Submitted class code: <b>{submittedClassCode}</b>
         </div>
       )}
 

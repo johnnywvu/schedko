@@ -5,7 +5,7 @@ import { insertExamSchedules, closeConnection, findExamSchedule } from './dbServ
 import fs from 'fs/promises';
 
 // ------------------- OCR -------------------
-const recognizeText = async (imagePath) => {
+export const recognizeText = async (imagePath) => {
   const worker = await createWorker();
   try {
     const { data: { text } } = await worker.recognize(imagePath);
