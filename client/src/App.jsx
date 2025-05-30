@@ -5,6 +5,7 @@ import Hero from './components/Hero'
 import HowItWorks from './components/HowItWorks'
 import Footer from './components/Footer'
 import Schedule from './components/Schedule'
+import Results from './components/Results'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           </>
         } />
         <Route path="/schedule" element={<Schedule />} />
+        <Route path="/results" element={<Results />} />
       </Routes>
 
       <Footer />

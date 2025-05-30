@@ -70,6 +70,9 @@ const Hero = () => {
       if (response.ok && result.success) {
         setValidationStatus(true);
         setShowConfirmation(true); // Show confirmation modal
+        // Navigate to results page with data
+        navigate('/results', { state: { dbSchedules: result.data || [] } });
+
       } else {
         setValidationStatus(false);
       }

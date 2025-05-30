@@ -3,15 +3,11 @@ import html2canvas from 'html2canvas'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 
-export default function Calendar() {
+export default function Calendar({ events = [] }) {
   const calendarRef = useRef()
 
-  const myArray = [
-    { name: 'Event A', start: '2025-05-28T10:00:00', end: '2025-05-28T11:00:00' },
-    { name: 'Event B', start: '2025-05-29T07:00:00', end: '2025-05-29T08:00:00' },
-  ]
-
-  const events = myArray.map(({ name: title, start, end }) => ({ title, start, end }))
+  // Use passed-in events if provided, else fallback to myArray
+  const calendarEvents = events;
 
   const downloadImage = () => {
     html2canvas(calendarRef.current).then(canvas => {
@@ -36,14 +32,14 @@ export default function Calendar() {
           plugins={[timeGridPlugin]}
           contentHeight="auto"
           initialView="timeGridWeek"
-          initialDate="2025-05-28"
+          initialDate={calendarEvents[0]?.start?.slice(0, 10) || "2025-05-28"}
           weekends={false}
           slotMinTime="07:00:00"
           slotMaxTime="18:00:00"
           hiddenDays={[0, 1, 2, 6]}
           allDaySlot={false}
           slotDuration="00:20:00"
-          events={events}
+          events={calendarEvents}
         />
       </div>
     </>
