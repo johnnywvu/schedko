@@ -24,3 +24,12 @@ export async function findExamSchedule({ normalizedCode, examType, academicYear,
 export async function closeConnection() {
   await client.close();
 }
+
+export async function checkSchedulesInDB(classCode, examSem, academicYear) {
+  const collection = await connect();
+  return collection.find({ 
+    classCode: classCode, 
+    examSem: examSem, 
+    academicYear: academicYear 
+  }).toArray();
+}

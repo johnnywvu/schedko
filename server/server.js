@@ -7,6 +7,8 @@ import cors from 'cors';
 import convertPdfToImage from './processes/convertPdfToImage.js';
 import { recognizeText } from './processes/ocr.js';
 import { normalizeClassCode } from './processes/utils.js';
+import { insertExamSchedules } from './processes/dbService.js';
+import { checkSchedulesInDB } from './processes/dbService.js'
 
 let ocrResults = []; // Store all parsed objects here
 let filteredResults = []; // Store filtered results based on class code
@@ -26,47 +28,38 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
 
+    const classCode = normalizeClassCode(req.body.classCode);
     const pdfPath = req.file.path;
-
     const outputDir = path.join('server/pages');
-
     const outputName = path.join(outputDir, 'page');
 
     await new Promise((resolve, reject) => {
-
       convertPdfToImage(pdfPath, outputName, err => err ? reject(err) : resolve());
-
     });
+
     const files = await fs.readdir(outputDir);
+    const pageImages = files.filter(f => f.match(/^page-\d+\.png$/)).sort();
 
-    const pageImages = files.filter(f => f.match(/^page-\d+\.png$/)).sort((a, b) => {
-      const getNum = s => parseInt(s.match(/(\d+)/)?.[0] || '0', 10);
+    if (pageImages.length === 0) {
+      return res.status(400).json({ success: false, message: 'No pages found in PDF after conversion' });
+    }
 
-      return getNum(a) - getNum(b);
+    const firstPageText = await recognizeText(path.join(outputDir, pageImages[0]));
+    const firstLine = firstPageText.split('\n')[0];
+    const semMatch = firstLine.match(/midterm|finals/i);
+    const examSem = semMatch ? (semMatch[0].toLowerCase().startsWith('m') ? 'm' : 'f') : null;
+    const yearMatch = firstLine.match(/(20\d{2}-20\d{2})/);
+    const academicYear = yearMatch ? yearMatch[1] : null;
 
-    });
+    if (!examSem || !academicYear) {
+      return res.status(400).json({ success: false, message: 'Could not extract examSem or academicYear' });
+    }
 
     ocrResults = [];
-    let examSem = null;
-    let academicYear = null;
-    // Get examSem and academicYear from the first line of the first page
-    if (pageImages.length > 0) {
-      const firstPageText = await recognizeText(path.join(outputDir, pageImages[0]));
-      const firstLine = firstPageText.split('\n')[0];
-      // Example: "Midterm 2024-2025" or "Finals 2023-2024"
-      // Extract examSem (m or f) and academicYear (20XX-20XX)
-      const semMatch = firstLine.match(/midterm|finals/i);
-      if (semMatch) {
-        examSem = semMatch[0].toLowerCase().startsWith('m') ? 'm' : 'f';
-      }
-      const yearMatch = firstLine.match(/(20\d{2}-20\d{2})/);
-      if (yearMatch) {
-        academicYear = yearMatch[1];
-      }
-    }
+
     for (const img of pageImages) {
       const text = await recognizeText(path.join(outputDir, img));
-      const lines = text.split('\n').slice(1); // skip first line
+      const lines = text.split('\n').slice(1);
       for (const line of lines) {
         const parts = line.split(',').map(part => part.trim());
         if (parts.length !== 6) continue;
@@ -84,19 +77,34 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
         });
       }
     }
-    console.log("ocrDone");
-    
-    const classCode = normalizeClassCode(req.body.classCode);
 
     filteredResults = ocrResults.filter(obj => obj.classCode === classCode);
 
-    console.log(filteredResults);
+    if (filteredResults.length === 0) {
+      return res.status(404).json({ success: false, message: 'No matching schedule data found in OCR' });
+    }
 
-    return res.status(200).json({ success: true, message: 'File uploaded, converted, and OCR complete' });
+    const sample = filteredResults[0];
+    const existing = await checkSchedulesInDB(sample.classCode, sample.examSem, sample.academicYear);
+
+    if (existing.length > 0) {
+      return res.status(200).json({
+        success: true,
+        message: 'Schedules already exist in DB. Skipping insertion.',
+        data: existing
+      });
+    }
+
+    await insertExamSchedules(filteredResults);
+    console.log('Filtered results inserted into the database.');
+
+    return res.status(200).json({ success: true, message: 'OCR complete and data inserted', data: filteredResults });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Server error', error: err.message });
   }
 });
+
+
 
 // --- OCR Results Route ---
 app.get('/api/ocr-results', (req, res) => {
