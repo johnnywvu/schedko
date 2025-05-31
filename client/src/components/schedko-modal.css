@@ -1,0 +1,126 @@
+/* SchedKo Modal Styles - system font, responsive, green/gold theme */
+
+:root {
+  --schedko-green: #15803d;
+  --schedko-green-dark: #166534;
+  --schedko-gold: #facc15;
+  --schedko-bg: #f8fafc;
+  --schedko-radius: 1.25rem;
+  --schedko-shadow: 0 4px 32px 0 rgba(21,128,61,0.18);
+  --font-lora: 'Lora', serif;
+  --font-jost: 'Jost', sans-serif;
+}
+
+.schedko-modal-overlay {
+  position: fixed;
+  left: 0; top: 0; right: 0; bottom: 0;
+  z-index: 1000;
+  background: rgba(22, 101, 52, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-jost);
+}
+
+.schedko-modal {
+  background: #fff;
+  border-radius: var(--schedko-radius);
+  box-shadow: var(--schedko-shadow);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  max-width: 95vw;
+  width: 100%;
+  min-width: 260px;
+  max-width: 400px;
+  border: 1px solid #e0e7ef;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.schedko-modal-title {
+  font-family: var(--font-lora);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--schedko-green-dark);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.schedko-modal-input {
+  width: 100%;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  font-family: var(--font-jost);
+  margin-bottom: 0.5rem;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.schedko-modal-input:focus {
+  border-color: var(--schedko-green);
+  outline: none;
+  box-shadow: 0 0 0 2px #15803d22;
+}
+
+.schedko-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.schedko-modal-btn-cancel {
+  background: #e5e7eb;
+  color: #334155;
+  font-family: var(--font-jost);
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+}
+.schedko-modal-btn-cancel:hover, .schedko-modal-btn-cancel:focus {
+  background: #cbd5e1;
+  color: #1e293b;
+}
+
+.schedko-modal-btn-submit {
+  background: var(--schedko-green);
+  color: #fff;
+  font-family: var(--font-jost);
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  cursor: pointer;
+  box-shadow: 0 1px 4px 0 rgba(21,128,61,0.08);
+}
+.schedko-modal-btn-submit:hover, .schedko-modal-btn-submit:focus {
+  background: var(--schedko-gold);
+  color: var(--schedko-green-dark);
+  box-shadow: 0 2px 8px 0 rgba(250,204,21,0.13);
+  transform: translateY(-2px) scale(1.03);
+}
+.schedko-modal-btn-submit:disabled {
+  background: #bbf7d0;
+  color: #080808;
+  cursor: not-allowed; 
+}
+
+@media (max-width: 600px) {
+  .schedko-modal {
+    padding: 1.25rem 0.5rem 1rem 0.5rem;
+    min-width: 0;
+    max-width: 98vw;
+  }
+  .schedko-modal-title {
+    font-size: 1.1rem;
+  }
+  .schedko-modal-input {
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+  }
+}

@@ -32,9 +32,9 @@ const Navbar = () => {
                 <div className="hidden md:block">
                     <div className="ml-4 lg:ml-10 flex items-center space-x-2 lg:space-x-4">
                         <Link to="/" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Home</Link>
-                        <Link to="/schedule" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">My Schedule</Link>
-                        <a href="#" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">About</a>
-                        <a href="#" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Support</a>
+                        <Link to="/database" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Database</Link>
+                        <Link to="/about" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">About</Link>
+                        <Link to="/support" className="text-lg lg:text-2xl font-jost text-[#f4c968] px-2 lg:px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Support</Link>
                     </div>
                 </div>
 
@@ -56,9 +56,9 @@ const Navbar = () => {
             <div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
                 <div className="px-2 pt-2 pb-3 space-y-1 border-t border-[#004d30]">
                     <Link to="/" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Home</Link>
-                    <Link to="/schedule" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">My Schedule</Link>
-                    <a href="#" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">About</a>
-                    <a href="#" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Support</a>
+                    <Link to="/database" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Database</Link>
+                    <Link to="/about" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">About</Link>
+                    <Link to="/support" className="block text-lg font-jost text-[#f4c968] px-3 py-2 rounded-md hover:bg-[#004d30] transition-colors duration-200">Support</Link>
                 </div>
             </div>
         </div>

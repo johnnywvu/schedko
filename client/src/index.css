@@ -34,3 +34,29 @@
 .animate-fadeOut {
   animation: fadeOut 4s forwards;
 }
+
+:root {
+  --schedko-green: #005b39;
+  --schedko-green-dark: #166534;
+  --schedko-gold: #facc15;
+  --schedko-bg: #f8fafc;
+  --schedko-error: #fee2e2;
+  --schedko-error-border: #ef4444;
+  --schedko-warning: #fef9c3;
+  --schedko-warning-border: #facc15;
+  --schedko-info: #dcfce7;
+  --schedko-info-border: #15803d;
+  --schedko-radius: 1rem;
+  --schedko-shadow: 0 2px 12px 0 rgba(21,128,61,0.08);
+  --font-lora: 'Lora', serif;
+  --font-jost: 'Jost', sans-serif;
+}
+
+body {
+  font-family: var(--font-jost);
+  background: var(--schedko-bg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-lora);
+}

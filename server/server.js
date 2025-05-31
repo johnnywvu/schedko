@@ -9,6 +9,8 @@ import { recognizeText } from './processes/ocr.js';
 import { normalizeClassCode } from './processes/utils.js';
 import { insertExamSchedules } from './processes/dbService.js';
 import { checkSchedulesInDB } from './processes/dbService.js'
+import dotenv from 'dotenv';
+dotenv.config();
 
 let ocrResults = []; // Store all parsed objects here
 let filteredResults = []; // Store filtered results based on class code
@@ -16,6 +18,18 @@ let filteredResults = []; // Store filtered results based on class code
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Add this test route temporarily
+app.get('/api/test-db', async (req, res) => {
+  try {
+    const { connect } = await import('./processes/dbService.js');
+    const collection = await connect();
+    const count = await collection.countDocuments();
+    res.json({ success: true, message: 'DB connected', count });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
@@ -105,10 +119,28 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
 });
 
 
-
 // --- OCR Results Route ---
 app.get('/api/ocr-results', (req, res) => {
   res.json({ success: true, data: ocrResults });
+});
+
+// --- Get All Schedules in DB ---
+app.get('/api/schedules', async (req, res) => {
+  try {
+    const { classCode, examSem, academicYear } = req.query;
+    // If any filter is provided, use it; otherwise, get all
+    let results;
+    if (classCode || examSem || academicYear) {
+      results = await checkSchedulesInDB(classCode, examSem, academicYear);
+    } else {
+      // Get all schedules
+      const collection = await (await import('./processes/dbService.js')).connect();
+      results = await collection.find({}).toArray();
+    }
+    res.json({ success: true, data: results });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Failed to fetch schedules', error: err.message });
+  }
 });
 
 const PORT = process.env.PORT || 3000;

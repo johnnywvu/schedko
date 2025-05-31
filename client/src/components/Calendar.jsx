@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import html2canvas from 'html2canvas'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import './Calendar.css';
 
 export default function Calendar({ events = [] }) {
   const calendarRef = useRef()
@@ -19,16 +20,16 @@ export default function Calendar({ events = [] }) {
   }
 
   return (
-    <>
-      <button onClick={downloadImage}>Download</button>
-      <div ref={calendarRef}>
+    <div className="calendar-root">
+      <button className="calendar-download-btn" onClick={downloadImage}>Download as Image</button>
+      <div ref={calendarRef} className="calendar-wrapper">
         <FullCalendar
           headerToolbar={{
             start: '',
             center: 'title',
             end: ''
           }}
-          titleFormat={() => 'Midterm Schedule'}
+          titleFormat={() => 'Finals Exam'}
           plugins={[timeGridPlugin]}
           contentHeight="auto"
           initialView="timeGridWeek"
@@ -42,6 +43,6 @@ export default function Calendar({ events = [] }) {
           events={calendarEvents}
         />
       </div>
-    </>
+    </div>
   )
 }

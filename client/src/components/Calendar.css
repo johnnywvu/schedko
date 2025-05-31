@@ -1,0 +1,107 @@
+/* Calendar.css - Responsive, SchedKo green/gold theme, Lora/Jost fonts */
+
+:root {
+  --schedko-green: #15803d;
+  --schedko-green-dark: #166534;
+  --schedko-gold: #facc15;
+  --schedko-bg: #f8fafc;
+  --schedko-radius: 1rem;
+  --schedko-shadow: 0 2px 12px 0 rgba(21,128,61,0.08);
+  --font-lora: 'Lora', serif;
+  --font-jost: 'Jost', sans-serif;
+}
+
+.calendar-root {
+  font-family: var(--font-jost);
+  width: 100%;
+  max-width: 100vw;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.calendar-download-btn {
+  background: var(--schedko-green);
+  color: #fff;
+  font-family: var(--font-jost);
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1.5rem;
+  margin: 0 0 1rem 0;
+  align-self: flex-end;
+  box-shadow: 0 1px 4px 0 rgba(21,128,61,0.08);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  cursor: pointer;
+}
+.calendar-download-btn:hover, .calendar-download-btn:focus {
+  background: var(--schedko-green-dark);
+  box-shadow: 0 2px 8px 0 rgba(21,128,61,0.13);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.calendar-wrapper {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 4px 0 rgba(21,128,61,0.06);
+  padding: 0.5rem;
+  overflow-x: auto;
+}
+
+/* FullCalendar font and color override */
+.fc {
+  font-family: var(--font-jost) !important;
+}
+.fc .fc-toolbar-title {
+  font-family: var(--font-lora) !important;
+  color: var(--schedko-green-dark);
+}
+.fc .fc-button {
+  background: var(--schedko-green);
+  border: none;
+  color: #fff;
+  font-family: var(--font-jost);
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+.fc .fc-button:hover, .fc .fc-button:focus {
+  background: var(--schedko-gold);
+  color: var(--schedko-green-dark);
+}
+.fc .fc-col-header-cell-cushion, .fc .fc-timegrid-slot-label-cushion {
+  color: var(--schedko-green-dark);
+  font-family: var(--font-jost);
+}
+.fc .fc-event {
+  background: var(--schedko-gold);
+  color: var(--schedko-green-dark);
+  border: 1.5px solid var(--schedko-green);
+  font-family: var(--font-jost);
+  border-radius: 0.5rem;
+}
+.fc .fc-event-title {
+  font-family: var(--font-lora);
+}
+
+@media (max-width: 900px) {
+  .calendar-wrapper {
+    padding: 0.25rem;
+  }
+}
+@media (max-width: 600px) {
+  .calendar-root {
+    padding: 0;
+  }
+  .calendar-download-btn {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem 0;
+  }
+  .calendar-wrapper {
+    border-radius: 0.5rem;
+    padding: 0.1rem;
+  }
+}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import './schedko-modal.css';
 
 
 const Hero = () => {
@@ -91,24 +92,24 @@ const Hero = () => {
     <div className="container mx-auto px-4 py-8 sm:py-12 md:py-16 lg:py-20">
       {/* Class Code Prompt Modal */}
       {showClassCodePrompt && (
-        <div className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 animate-modalPop">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-gray-200">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">Enter Your Class Code</h2>
+        <div className="schedko-modal-overlay">
+          <div className="schedko-modal">
+            <h2 className="schedko-modal-title">Enter Your Class Code</h2>
             <input
               type="text"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              className="schedko-modal-input"
               placeholder="e.g. MATH101"
               value={classCode}
               onChange={e => setClassCode(e.target.value)}
               autoFocus
             />
-            <div className="flex justify-end gap-2">
+            <div className="schedko-modal-actions">
               <button
-                className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+                className="schedko-modal-btn-cancel"
                 onClick={() => { setShowClassCodePrompt(false); setFileToUpload(null); }}
               >Cancel</button>
               <button
-                className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+                className="schedko-modal-btn-submit"
                 onClick={handleClassCodeSubmit}
                 disabled={!classCode.trim()}
               >Submit</button>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Calendar from './Calendar';
+import './Results.css'; // Add a CSS file for Results-specific styles
 
 // Helper: Convert date string to ISO format with better error handling
 function normalizeDate(dateStr) {
@@ -175,9 +176,9 @@ const Results = () => {
   // Defensive: If location.state is missing, show error
   if (!location.state) {
     return (
-      <div className="max-w-5xl mx-auto py-8 px-4">
-        <h1 className="text-2xl font-bold mb-4">Exam Schedule Results</h1>
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+      <div className="results-container">
+        <h1 className="results-title">Exam Schedule Results</h1>
+        <div className="results-error">
           <h3 className="font-bold">No Schedule Data Found</h3>
           <p className="mt-2">
             No schedule data was provided. This can happen if you refreshed the page or navigated here directly.<br />
@@ -185,7 +186,7 @@ const Results = () => {
           </p>
         </div>
         <button
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="results-btn"
           onClick={() => navigate('/')}
         >
           Back to Home
@@ -233,15 +234,13 @@ const Results = () => {
   // Show detailed error information if no events were created
   if (successfulEvents.length === 0) {
     return (
-      <div className="max-w-5xl mx-auto py-8 px-4">
-        <h1 className="text-2xl font-bold mb-4">Exam Schedule Results</h1>
-        
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+      <div className="results-container">
+        <h1 className="results-title">Exam Schedule Results</h1>
+        <div className="results-error">
           <h3 className="font-bold">No Valid Exam Schedules Found</h3>
           <p className="mt-2">
             Found {uniqueSchedules.length} schedule(s) but couldn't convert any to calendar events.
           </p>
-          
           {failedConversions.length > 0 && (
             <div className="mt-4">
               <h4 className="font-semibold">Conversion Errors:</h4>
@@ -262,9 +261,8 @@ const Results = () => {
             </div>
           )}
         </div>
-        
         <button
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="results-btn"
           onClick={() => navigate('/')}
         >
           Back to Home
@@ -274,47 +272,42 @@ const Results = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto py-8 px-4">
-      <h1 className="text-2xl font-bold mb-4">
+    <div className="results-container">
+      <h1 className="results-title">
         Exam Schedule Results ({successfulEvents.length} exam{successfulEvents.length !== 1 ? 's' : ''})
       </h1>
-      
-      {/* Show conversion summary */}
-      <div className="mb-4">
+      <div className="results-summary">
         {failedConversions.length > 0 && (
-          <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-3 mb-4">
+          <div className="results-warning">
             <p className="text-sm">
               Successfully converted {successfulEvents.length} out of {uniqueSchedules.length} schedules.
               {failedConversions.length} schedule(s) had errors and were skipped.
             </p>
           </div>
         )}
-        
         {uniqueSchedules.length !== allSchedules.length && (
-          <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-3 mb-4">
+          <div className="results-info">
             <p className="text-sm">
               Removed {allSchedules.length - uniqueSchedules.length} duplicate schedule(s).
             </p>
           </div>
         )}
       </div>
-      
-      {/* Show schedule details */}
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+      <div className="results-details">
         <h3 className="font-semibold mb-2">Schedule Details:</h3>
         {successfulEvents.map((event, index) => (
-          <div key={event.id} className="text-sm text-gray-700 mb-1">
+          <div key={event.id} className="results-detail-item">
             <strong>{event.extendedProps.course}</strong> ({event.extendedProps.classCode}) - 
             Room {event.extendedProps.room} - {event.extendedProps.college} - 
             {new Date(event.start).toLocaleDateString()} {new Date(event.start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - {new Date(event.end).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
           </div>
         ))}
       </div>
-      
-      <Calendar events={successfulEvents} />
-      
+      <div className="results-calendar-wrapper">
+        <Calendar events={successfulEvents} />
+      </div>
       <button
-        className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        className="results-btn mt-6"
         onClick={() => navigate('/')}
       >
         Back to Home
