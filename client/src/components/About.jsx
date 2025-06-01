@@ -1,8 +1,8 @@
 import React from 'react';
 
 const About = () => (
-  <div className="min-h-screen bg-gray-50 py-8">
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
+    <div className="max-w-3xl w-full px-4 sm:px-6 lg:px-8">
       <div className="bg-white rounded-xl shadow p-8 border-t-4 border-green-400">
         <h1 className="font-lora text-3xl font-bold text-green-900 mb-4">About SchedKo</h1>
         <p className="font-jost text-lg text-green-900 mb-4">
